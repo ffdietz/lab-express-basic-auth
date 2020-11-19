@@ -8,6 +8,8 @@ const hbs = require('hbs');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 const path = require('path');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 
 const app_name = require('./package.json').name;
@@ -32,6 +34,26 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
+
+
+// express-session configuration
+
+app.use(
+    session({
+    secret: process.env.SESSION_SECRET,////sign the cookies, ultimate session was used //SECRET ADDED IN env.
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 365},
+
+    saveUnititalized: false,
+    resave: true,               
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection,
+        ttl: 24 * 60 * 60 * 1000
+    })
+
+  })
+)
+
+//end configuration
 
 const index = require('./routes/index.routes');
 app.use('/', index);
