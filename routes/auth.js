@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require('bcrypt');
-const User = require('../models/User.model');
+const express   = require("express");
+const router    = express.Router();
+const bcrypt    = require('bcrypt');
+const User      = require('../models/User.model');
 
 router.get('/signup', (req,res) => {            //when call the /signup
     res.render('signup');                       //render hbs 'signup'
